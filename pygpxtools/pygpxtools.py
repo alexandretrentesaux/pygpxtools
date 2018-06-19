@@ -178,7 +178,7 @@ def cli_change_timestamps(input, output, year, month, day, hour, minute, second)
         new_time = datetime.datetime(year=year, month=month, day=day, hour=hour, minute=minute, second=second)
         delta = new_time - gpx.time
 
-        print('Debug #01: gpx time: {} - new time {} - {}'.format(gpx.time, new_time, delta.days))
+        # print('Debug #01: gpx time: {} - new time {} - {}'.format(gpx.time, new_time, delta.days))
         # print('Debug #02: offset year : {}'.format(gpx.time.year - year))
         # print('Debug #03: offset month : {}'.format(gpx.time.month - month))
         # print('Debug #04: offset day : {}'.format(gpx.time.day - day))
@@ -187,14 +187,14 @@ def cli_change_timestamps(input, output, year, month, day, hour, minute, second)
         # print('Debug #07: offset second : {}'.format(gpx.time.second - second))
 
         gpx.time = new_time
-        first = None
+        # first = None
         for track in gpx.tracks:
             for segment in track.segments:
                 for point in segment.points:
                     point.time = point.time + delta
-                    if first is None:
-                        print('Debug #08: point: {}/{} : {}'.format(point.latitude, point.longitude, point.time))
-                        first = point.time
+                    # if first is None:  # debug print 1st point for debug
+                    #     print('Debug #08: point: {}/{} : {}'.format(point.latitude, point.longitude, point.time))
+                    #     first = point.time
         if output is None:
             output = '/home/alexantr/tmp/pygpxtools_' + datetime.datetime.today().strftime('%Y%m%d%H%M') + '.gpx'
         with open(output, 'w') as new_file:
@@ -207,3 +207,19 @@ def cli_change_timestamps(input, output, year, month, day, hour, minute, second)
 @click.option('--password', help='Strava password', default=None)
 def cli_strava_upload(input, login, password):
     print('todo')
+
+
+@cli.command('weatherUpdate')
+@click.option('--input', help='Input GPX file from Garmin Connect where remove pauses', default=None)
+@click.option('--output', help='Output GPX file to upload to Strava', default=None)
+@click.option('--login', help='AccuWeather login', default=None)
+@click.option('--password', help='AccuWeather password', default=None)
+def cli_weather_update(input, login, password):
+    print('todo')
+
+
+@cli_command('summarize')
+@click.option('--input', help='Input GPX file from Garmin Connect where remove pauses', default=None)
+def cli_summarize(input):
+    print('todo')
+
