@@ -1,0 +1,7 @@
+PyYAML
+click
+clickclick
+py
+pytest
+six
+gpxpy
