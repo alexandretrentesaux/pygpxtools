@@ -1,0 +1,42 @@
+{"dictionary": [
+  {
+    "key": "all",
+    "display": "Any Event Type"
+  },
+  {
+    "key": "geocaching",
+    "display": "Geocaching"
+  },
+  {
+    "key": "fitness",
+    "display": "Fitness"
+  },
+  {
+    "key": "recreation",
+    "display": "Recreation"
+  },
+  {
+    "key": "race",
+    "display": "Race"
+  },
+  {
+    "key": "specialEvent",
+    "display": "Special Event"
+  },
+  {
+    "key": "training",
+    "display": "Training"
+  },
+  {
+    "key": "transportation",
+    "display": "Transportation"
+  },
+  {
+    "key": "touring",
+    "display": "Touring"
+  },
+  {
+    "key": "uncategorized",
+    "display": "Uncategorized"
+  }
+]}
