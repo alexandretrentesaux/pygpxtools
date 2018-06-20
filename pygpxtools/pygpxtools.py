@@ -5,10 +5,12 @@ import click
 import os
 import sys
 import datetime
+import json
 import pkg_resources
 from clickclick import AliasedGroup
 import gpxpy
 import gpxpy.gpx
+from pygments import highlight, lexers, formatters
 
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -48,7 +50,7 @@ def print_version(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return
     print('{}'.format(pkg_resources.require("pyoxeconf")[0]))
-    click.echo('pygpxtools_cli version: {}'.format(__version__))
+    # click.echo('pygpxtools_cli version: {}'.format(__version__))
     ctx.exit()
 
 
@@ -77,6 +79,22 @@ def check_input_file(input):
     else:
         print('Error: --input is mandatory for pygpxtools_cli cleanPause')
         sys.exit(-1)
+
+
+def json_formatter(data, colorize):
+    """JSON output formatter
+
+    Args:
+        data (json): json output to pretty print
+        colorize (bool): colorize or not output
+    """
+
+    if data != {}:
+        output = json.dumps(data, indent=4, sort_keys=True, ensure_ascii=False)
+        if colorize:
+            print(highlight(output, lexers.JsonLexer(), formatters.TerminalFormatter()))
+        else:
+            print(output)
 
 
 # CLI
@@ -202,4 +220,34 @@ def cli_change_timestamps(input, output, year, month, day, hour, minute, second)
 @click.option('--login', help='Strava login', default=None)
 @click.option('--password', help='Strava password', default=None)
 def cli_strava_upload(input, login, password):
-    print('todo')
+    input = '/home/alexantr/Workspace/pygpxtools/resources/activity_2778234104.gpx'  # remove for dev only
+    check_input_file(input)
+
+    activity_title = ''
+    activity_types = None
+
+    with open('etc/garmin/activity_types_fr.json') as json_file:
+        activity_types = json.loads(json_file.read())
+
+    with open(input, 'r') as gpx_file:
+        gpx = gpxpy.parse(gpx_file)
+        for track in gpx.tracks:
+            print('Debug: track type: {} - track time: {}'.format(track.type, gpx.time))
+
+            for item in activity_types['dictionary']:
+                if item['key'] == track.type:
+                    activity_title += item['display'] + ' '
+
+            if gpx.time.hour < 6:
+                activity_title += 'la nuit'
+            elif 6 <= gpx.time.hour < 12:
+                activity_title += 'le matin'
+            elif 12 <= gpx.time.hour < 14:
+                activity_title += 'le midi'
+            elif 14 <= gpx.time.hour < 19:
+                activity_title += 'l\'aprés-midi'
+            elif 19 <= gpx.time.hour:
+                activity_title += 'le soir'
+
+            print('Debug: generated title: {}'.format(activity_title))
+

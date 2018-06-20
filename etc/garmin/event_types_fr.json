@@ -1,0 +1,42 @@
+{"dictionary": [
+  {
+    "key": "all",
+    "display": "Tout type d'événement"
+  },
+  {
+    "key": "geocaching",
+    "display": "Chasse au trésor"
+  },
+  {
+    "key": "fitness",
+    "display": "Sport"
+  },
+  {
+    "key": "recreation",
+    "display": "Loisirs"
+  },
+  {
+    "key": "race",
+    "display": "Course"
+  },
+  {
+    "key": "specialEvent",
+    "display": "Evénement spécial"
+  },
+  {
+    "key": "training",
+    "display": "Entraînement"
+  },
+  {
+    "key": "transportation",
+    "display": "Transports"
+  },
+  {
+    "key": "touring",
+    "display": "Tourisme"
+  },
+  {
+    "key": "uncategorized",
+    "display": "Sans catégorie"
+  }
+]}
