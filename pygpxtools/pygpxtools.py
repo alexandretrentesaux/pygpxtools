@@ -2,15 +2,14 @@
 # -*- encoding: utf-8 -*-
 
 import click
-import os
-import sys
 import datetime
-import json
 import pkg_resources
 from clickclick import AliasedGroup
 import gpxpy
 import gpxpy.gpx
-from pygments import highlight, lexers, formatters
+from pygpxtools.json_utils import *
+from pygpxtools.gpx_utils import *
+from pygpxtools.strava_utils import *
 
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -49,7 +48,7 @@ def print_version(ctx, param, value):
     """
     if not value or ctx.resilient_parsing:
         return
-    print('{}'.format(pkg_resources.require("pyoxeconf")[0]))
+    print('{}'.format(pkg_resources.require("pygpxtools")[0]))
     # click.echo('pygpxtools_cli version: {}'.format(__version__))
     ctx.exit()
 
@@ -63,38 +62,6 @@ def check_host_option(host):
     if host is None:
         print('--host option is mandatory')
         exit(-1)
-
-
-def check_input_file(input):
-    """Summary
-
-    Args:
-        input (TYPE): Description
-    """
-    if input is not None:
-        extension = os.path.basename(input).split('.')[1]
-        if extension != 'gpx':
-            print('Error: not supported file extension {}'.format(extension))
-            sys.exit(-1)
-    else:
-        print('Error: --input is mandatory for pygpxtools_cli cleanPause')
-        sys.exit(-1)
-
-
-def json_formatter(data, colorize):
-    """JSON output formatter
-
-    Args:
-        data (json): json output to pretty print
-        colorize (bool): colorize or not output
-    """
-
-    if data != {}:
-        output = json.dumps(data, indent=4, sort_keys=True, ensure_ascii=False)
-        if colorize:
-            print(highlight(output, lexers.JsonLexer(), formatters.TerminalFormatter()))
-        else:
-            print(output)
 
 
 # CLI
@@ -269,5 +236,3 @@ def cli_weather_update(input, login, password):
 @click.option('--input', help='Input GPX file from Garmin Connect where remove pauses', default=None)
 def cli_summarize(input):
     print('todo')
-
-
