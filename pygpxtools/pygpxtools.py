@@ -265,7 +265,7 @@ def cli_weather_update(input, login, password):
     print('todo')
 
 
-@cli_command('summarize')
+@cli.command('summarize')
 @click.option('--input', help='Input GPX file from Garmin Connect where remove pauses', default=None)
 def cli_summarize(input):
     print('todo')
