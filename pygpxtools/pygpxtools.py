@@ -224,7 +224,6 @@ def cli_change_timestamps(input, output, year, month, day, hour, minute, second)
 @click.option('--login', help='Strava login', default=None)
 @click.option('--password', help='Strava password', default=None)
 def cli_strava_upload(input, login, password):
-<<<<<<< HEAD
     input = '/home/alexantr/Workspace/pygpxtools/resources/activity_2778234104.gpx'  # remove for dev only
     check_input_file(input)
 
@@ -255,8 +254,6 @@ def cli_strava_upload(input, login, password):
                 activity_title += 'le soir'
 
             print('Debug: generated title: {}'.format(activity_title))
-=======
-    print('todo')
 
 
 @cli.command('weatherUpdate')
@@ -272,5 +269,5 @@ def cli_weather_update(input, login, password):
 @click.option('--input', help='Input GPX file from Garmin Connect where remove pauses', default=None)
 def cli_summarize(input):
     print('todo')
->>>>>>> c5d945b6f431a57662c14bec327ca14b1ba86ba2
+
 
