@@ -6,3 +6,4 @@ pytest
 six
 gpxpy
 pygments
+swagger-py

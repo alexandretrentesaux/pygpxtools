@@ -1,6 +1,9 @@
+# -*- encoding: utf-8 -*-
+
 import configparser
 import tempfile
 import os
+
 
 # create connection config file
 def strava_configure(client_id, client_secret, token):

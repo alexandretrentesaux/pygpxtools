@@ -5,6 +5,8 @@ import click
 import datetime
 import pkg_resources
 from clickclick import AliasedGroup
+import swagger_client
+from swagger_client.rest import ApiException
 import gpxpy
 import gpxpy.gpx
 from pygpxtools.json_utils import *
