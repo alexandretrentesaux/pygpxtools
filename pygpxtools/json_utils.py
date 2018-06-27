@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import json
 from pygments import highlight, lexers, formatters
 
