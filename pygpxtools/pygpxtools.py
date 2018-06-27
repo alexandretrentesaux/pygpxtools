@@ -222,7 +222,10 @@ def cli_strava_upload(input, login, password):
             elif 19 <= gpx.time.hour:
                 activity_title += 'le soir'
 
-            print('Debug: generated title: {}'.format(activity_title))
+            print('Debug# generated title: {}'.format(activity_title))
+
+        clientId, clientSecret, token = strava_get_auth()
+        print('Debug# Strava credentials - Id: {} - Secret : {} - Token {}'.format(clientId, clientSecret, token))
 
 
 @cli.command('weatherUpdate')

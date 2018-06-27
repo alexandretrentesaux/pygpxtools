@@ -3,6 +3,9 @@
 import configparser
 import tempfile
 import os
+import sys
+from pygpxtools.__init__ import __logger__
+
 
 
 # create connection config file
@@ -32,10 +35,24 @@ def strava_get_auth():
         str: client secret
         str: token
     """
-    config = configparser.ConfigParser()
-    config.read(os.path.join(tempfile.gettempdir(), '.strava.ini'))
-    clientId = config.get('default', 'client_id', raw=False)
-    clientSecret = config.get('default', 'client_secret', raw=False)
-    token = config.get('default', 'token', raw=False)
-    return clientId, clientSecret, token
+    if os.path.exists(os.path.join(tempfile.gettempdir(), '.strava')):
+        config = configparser.ConfigParser()
+        config.read(os.path.join(tempfile.gettempdir(), '.strava'))
+        if config.has_section('default'):
+            if config.has_option('default', 'client_id') and \
+                    config.has_option('default', 'client_secret') and \
+                    config.has_option('default', 'token'):
+                client_id = config.get('default', 'client_id', raw=False)
+                client_secret = config.get('default', 'client_secret', raw=False)
+                token = config.get('default', 'token', raw=False)
+                return client_id, client_secret, token
+            else:
+                __logger__.error('Missing option in strava credentials. Please configure first')
+                sys.exit(-1)
+        else:
+            __logger__.error('Missing section in Strava credentials. Please configure first')
+            sys.exit(-1)
+    else:
+        __logger__.error('Missing Strava credentials cache file. Please configure first')
+        sys.exit(-1)
 
