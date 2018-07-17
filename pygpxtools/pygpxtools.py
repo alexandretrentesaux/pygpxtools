@@ -188,6 +188,37 @@ def cli_change_timestamps(input, output, year, month, day, hour, minute, second)
             new_file.write(gpx.to_xml())
 
 
+@cli.command('slow')
+@click.option('--input', help='Input GPX file from Garmin Connect where remove pauses', default=None)
+@click.option('--output', help='Output GPX file to upload to Strava', default=None)
+@click.option('--factor', )
+def cli_slow(input, output, factor):
+    """
+    Decrease speed in Garmin GPX file in adding factor to current timestamp.
+    Only support files with .gpx extension.
+
+
+    Args:
+        input (STRING): filename or fullpath of GPX file to correct
+        output (STRING): filename or fullpath for save corrected GPX
+        factor (INT): factor in milliseconds to apply to current timestamps
+
+    Returns:
+    """
+    check_input_file(input)
+
+    with open(input, 'r') as gpx_file:
+        gpx = gpxpy.parse(gpx_file)
+        for track in gpx.tracks:
+            for segment in track.segments:
+                for point in segment.points:
+                    point.time = point.time - datetime.timedelta(milliseconds=factor)
+        if output is None:
+            output = '/home/alexantr/tmp/pygpxtools_' + datetime.datetime.today().strftime('%Y%m%d%H%M') + '.gpx'
+        with open(output, 'w') as new_file:
+            new_file.write(gpx.to_xml())
+
+
 @cli.command('stravaUpload')
 @click.option('--input', help='Input GPX file to upload to Strava', default=None)
 @click.option('--login', help='Strava login', default=None)
