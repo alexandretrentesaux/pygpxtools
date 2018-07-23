@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 
+
 def req_headers_builder(method=None):
     """Create headers needed by requests method
 
@@ -17,10 +18,7 @@ def req_headers_builder(method=None):
     if method in ('POST', 'PUT'):
         headers.update({'Content-Type': 'application/json'})
     return headers
-<<<<<<< HEAD
-=======
 
 
 def req_url_builder(url):
     print('todo')
->>>>>>> 3763fefaab4b067f69df8233ed278811d71032e5
