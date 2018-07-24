@@ -5,8 +5,6 @@ import click
 import datetime
 import pkg_resources
 from clickclick import AliasedGroup
-import swagger_client
-from swagger_client.rest import ApiException
 import gpxpy
 import gpxpy.gpx
 from pygpxtools.json_utils import *
@@ -188,10 +186,11 @@ def cli_change_timestamps(input, output, year, month, day, hour, minute, second)
             new_file.write(gpx.to_xml())
 
 
-@cli.command('slow')
+@cli.command('slowdown')
 @click.option('--input', help='Input GPX file from Garmin Connect where remove pauses', default=None)
-@click.option('--output', help='Output GPX file to upload to Strava', default=None)
-@click.option('--factor', )
+@click.option('--output', help='Output GPX file to upload to Strava',
+              default='/home/alexantr/tmp/pygpxtools_' + datetime.datetime.today().strftime('%Y%m%d%H%M') + '.gpx')
+@click.option('--factor', help='Slow down inter point factor in milliseconds', default=100)
 def cli_slow(input, output, factor):
     """
     Decrease speed in Garmin GPX file in adding factor to current timestamp.
@@ -206,15 +205,14 @@ def cli_slow(input, output, factor):
     Returns:
     """
     check_input_file(input)
-
+    correction = factor
     with open(input, 'r') as gpx_file:
         gpx = gpxpy.parse(gpx_file)
         for track in gpx.tracks:
             for segment in track.segments:
                 for point in segment.points:
-                    point.time = point.time - datetime.timedelta(milliseconds=factor)
-        if output is None:
-            output = '/home/alexantr/tmp/pygpxtools_' + datetime.datetime.today().strftime('%Y%m%d%H%M') + '.gpx'
+                    point.time = point.time + datetime.timedelta(milliseconds=correction)
+                    correction += factor
         with open(output, 'w') as new_file:
             new_file.write(gpx.to_xml())
 
