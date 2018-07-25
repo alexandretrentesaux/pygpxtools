@@ -163,23 +163,20 @@ def cli_change_timestamps(input, output, year, month, day, hour, minute, second)
         new_time = datetime.datetime(year=year, month=month, day=day, hour=hour, minute=minute, second=second)
         delta = new_time - gpx.time
 
-        # print('Debug #01: gpx time: {} - new time {} - {}'.format(gpx.time, new_time, delta.days))
+        # print('Debug #01: gpx time: {} - new time {} / {}'.format(gpx.time, new_time, delta))
         # print('Debug #02: offset year : {}'.format(gpx.time.year - year))
         # print('Debug #03: offset month : {}'.format(gpx.time.month - month))
         # print('Debug #04: offset day : {}'.format(gpx.time.day - day))
         # print('Debug #05: offset hour : {}'.format(gpx.time.hour - hour))
         # print('Debug #06: offset minute : {}'.format(gpx.time.minute - minute))
         # print('Debug #07: offset second : {}'.format(gpx.time.second - second))
-
+        # print('Debug #08: test shift : current = {} / new = {}'.format(gpx.time, gpx.time + delta))
         gpx.time = new_time
-        # first = None
         for track in gpx.tracks:
             for segment in track.segments:
                 for point in segment.points:
+                    # print('Debug #08: point: {}/{} : current {} - update {}'.format(point.latitude, point.longitude, point.time, point.time + delta))
                     point.time = point.time + delta
-                    # if first is None:  # debug print 1st point for debug
-                    #     print('Debug #08: point: {}/{} : {}'.format(point.latitude, point.longitude, point.time))
-                    #     first = point.time
         if output is None:
             output = '/home/alexantr/tmp/pygpxtools_' + datetime.datetime.today().strftime('%Y%m%d%H%M') + '.gpx'
         with open(output, 'w') as new_file:
