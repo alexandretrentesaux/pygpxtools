@@ -80,7 +80,7 @@ def cli():
 
 
 @cli.command('cleanPause')
-@click.option('--input', help='Input GPX file from Garmin Connect where remove pauses', default=None)
+@click.option('--input', help='Input GPX file from Garmin Connect where remove pauses', required=True, default=None)
 @click.option('--output', help='Output GPX file to upload to Strava', default=None)
 def cli_clean_pause(input, output):
     """
@@ -94,7 +94,8 @@ def cli_clean_pause(input, output):
 
     Returns:
     """
-    check_input_file(input)
+    input = check_input_file(input, 'cleanPause')
+    output = check_output_file(output)
 
     with open(input, 'r') as gpx_file:
         previous_time = None
@@ -112,8 +113,6 @@ def cli_clean_pause(input, output):
                     previous_time = point.time
                     if correction > 0:
                         point.time = point.time - datetime.timedelta(seconds=correction - 1)
-        if output is None:
-            output = '/home/alexantr/tmp/pygpxtools_' + datetime.datetime.today().strftime('%Y%m%d%H%M') + '.gpx'
         with open(output, 'w') as new_file:
             new_file.write(gpx.to_xml())
 
@@ -143,7 +142,8 @@ def cli_change_timestamps(input, output, year, month, day, hour, minute, second)
 
     Returns:
     """
-    check_input_file(input)
+    input = check_input_file(input, 'changeTimestamps')
+    output = check_output_file(output)
 
     with open(input, 'r') as gpx_file:
         gpx = gpxpy.parse(gpx_file)
@@ -171,19 +171,18 @@ def cli_change_timestamps(input, output, year, month, day, hour, minute, second)
         # print('Debug #06: offset minute : {}'.format(gpx.time.minute - minute))
         # print('Debug #07: offset second : {}'.format(gpx.time.second - second))
         # print('Debug #08: test shift : current = {} / new = {}'.format(gpx.time, gpx.time + delta))
+
         gpx.time = new_time
         for track in gpx.tracks:
             for segment in track.segments:
                 for point in segment.points:
                     # print('Debug #08: point: {}/{} : current {} - update {}'.format(point.latitude, point.longitude, point.time, point.time + delta))
                     point.time = point.time + delta
-        if output is None:
-            output = '/home/alexantr/tmp/pygpxtools_' + datetime.datetime.today().strftime('%Y%m%d%H%M') + '.gpx'
         with open(output, 'w') as new_file:
             new_file.write(gpx.to_xml())
 
 
-@cli.command('slowdown')
+@cli.command('slowDown')
 @click.option('--input', help='Input GPX file from Garmin Connect where remove pauses', default=None)
 @click.option('--output', help='Output GPX file to upload to Strava',
               default='/home/alexantr/tmp/pygpxtools_' + datetime.datetime.today().strftime('%Y%m%d%H%M') + '.gpx')
@@ -201,7 +200,9 @@ def cli_slow(input, output, factor):
 
     Returns:
     """
-    check_input_file(input)
+    input = check_input_file(input, 'slowDown')
+    output = check_output_file(output)
+
     correction = factor
     with open(input, 'r') as gpx_file:
         gpx = gpxpy.parse(gpx_file)
@@ -219,8 +220,8 @@ def cli_slow(input, output, factor):
 @click.option('--login', help='Strava login', default=None)
 @click.option('--password', help='Strava password', default=None)
 def cli_strava_upload(input, login, password):
+    # input = check_input_file(input, 'stravaUpload')
     input = '/home/alexantr/Workspace/pygpxtools/resources/activity_2778234104.gpx'  # remove for dev only
-    check_input_file(input)
 
     activity_title = ''
     activity_types = None
@@ -260,10 +261,14 @@ def cli_strava_upload(input, login, password):
 @click.option('--login', help='AccuWeather login', default=None)
 @click.option('--password', help='AccuWeather password', default=None)
 def cli_weather_update(input, login, password):
+    # input = check_input_file(input, 'weatherUpdate')
+    # output = check_output_file(output)
     print('todo')
 
 
 @cli.command('summarize')
 @click.option('--input', help='Input GPX file from Garmin Connect where remove pauses', default=None)
 def cli_summarize(input):
+    # input = check_input_file(input, 'summarize')
+    # output = check_output_file(output)
     print('todo')
