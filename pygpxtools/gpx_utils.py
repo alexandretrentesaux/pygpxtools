@@ -29,11 +29,11 @@ def check_input_file(path, command):
 
 
 def check_output_file(path):
-    if path is None:
-        path = '/home/alexantr/tmp/pygpxtools_' + datetime.datetime.today().strftime('%Y%m%d%H%M') + '.gpx'
-    else:
+    if path is not None:
         extension = os.path.basename(path).split('.')[1]
         if extension != 'gpx':
             print('Error: not supported file extension {}'.format(extension))
             sys.exit(-1)
-    return full_path(path)
+        return full_path(path)
+    else:
+        return '/home/alexantr/tmp/pygpxtools_' + datetime.datetime.today().strftime('%Y%m%d%H%M') + '.gpx'
