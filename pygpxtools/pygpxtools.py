@@ -182,13 +182,13 @@ def cli_change_timestamps(input, output, year, month, day, hour, minute, second)
             new_file.write(gpx.to_xml())
 
 
-@cli.command('slowDown')
+@cli.command('updateSpeed')
 @click.option('--input', help='Input GPX file from Garmin Connect where remove pauses', default=None)
 @click.option('--output', help='Output GPX file to upload to Strava',
               default='/home/alexantr/tmp/pygpxtools_' + datetime.datetime.today().strftime('%Y%m%d%H%M') + '.gpx')
 @click.option('--factor', help='Slow down factor', type=float)
 @click.option('--dryrun', help='do not generate output', is_flag=True)
-def cli_slow(input, output, factor, dryrun):
+def cli_update_speed(input, output, factor, dryrun):
     """
     Decrease speed in Garmin GPX file in adding factor to current timestamp.
     Only support files with .gpx extension.
@@ -208,21 +208,24 @@ def cli_slow(input, output, factor, dryrun):
         gpx = gpxpy.parse(gpx_file)
         points_no = len(list(gpx.walk(only_points=True)))
         moving_time, stopped_time, moving_distance, stopped_distance, max_speed = gpx.get_moving_data()
-        print('Debug#01: numbers of point: {}'.format(points_no))
-        print('Debug#02: total time: {}'.format(format_time(moving_time)))
+        # print('Debug#01: numbers of point: {}'.format(points_no))
+        # print('Debug#02: total time: {}'.format(format_time(moving_time)))
         correction = step = ((moving_time * factor / 100) / (points_no - 1)) * 1000  # convert to milliseconds
-        print('Debug#03: factor {} - correction of {}s between 2 points.'.format(factor, step))
+        # print('Debug#03: factor {} - correction of {}s between 2 points.'.format(factor, step))
         for track in gpx.tracks:
             for segment in track.segments:
                 is_first_point = True
                 for point in segment.points:
                     if not is_first_point:
-                        # print('Debug#04: current point time {} - new point time {} - correction: {}'.format(point.time, point.time + datetime.timedelta(milliseconds=correction), correction))
+                        # print('Debug#04: current point time {} - new point time {} - correction: {}'.format(point.time, point.time + datetime.timedelta(milliseconds=correction), correction))
                         point.time = point.time + datetime.timedelta(milliseconds=correction)
                         correction += step
                     else:
                         # print('Debug#04: 1st Point : current point time {}'.format(point.time))
                         is_first_point = False
+        # tmp = gpxpy.parse(gpx.to_xml())
+        # moving_time, stopped_time, moving_distance, stopped_distance, max_speed = tmp.get_moving_data()
+        # print('Debug#03: updated total time: {}'.format(format_time(moving_time)))
         if not dryrun:
             with open(output, 'w') as new_file:
                 new_file.write(gpx.to_xml())
