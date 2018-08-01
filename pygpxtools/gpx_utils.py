@@ -2,6 +2,7 @@
 
 import os
 import sys
+import math
 import datetime
 
 
@@ -37,3 +38,14 @@ def check_output_file(path):
         return full_path(path)
     else:
         return '/home/alexantr/tmp/pygpxtools_' + datetime.datetime.today().strftime('%Y%m%d%H%M') + '.gpx'
+
+
+def format_time(time_s, seconds=False):
+    if not time_s:
+        return 'n/a'
+    elif seconds:
+        return str(int(time_s))
+    else:
+        minutes = math.floor(time_s / 60.)
+        hours = math.floor(minutes / 60.)
+        return '{}:{}:{}'.format(str(int(hours)).zfill(2), str(int(minutes % 60)).zfill(2), str(int(time_s % 60)).zfill(2))

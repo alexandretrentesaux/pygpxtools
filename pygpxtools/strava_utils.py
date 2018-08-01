@@ -7,7 +7,6 @@ import sys
 from pygpxtools.__init__ import __logger__
 
 
-
 # create connection config file
 def strava_configure(client_id, client_secret, token):
     """Create config file with connections parameters
